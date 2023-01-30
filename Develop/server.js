@@ -19,7 +19,7 @@ app.get('/notes', (req, res) =>
 app.get('/api/notes', (req, res) => {
   console.info(`${req.method} request received`);
 
-  var fileData = fs.readFile("./db/db.json", 
+  fs.readFileSync("./db/db.json", 
     (err, data) => err ? console.error(err) : console.log ("success reading \n" + data)
   );
 
