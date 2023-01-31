@@ -29,18 +29,18 @@ app.get('/api/notes', (req, res) => {
 });
 
 app.post('/api/notes', (req, res) => {
-  console.info(`${req.method} request received - save notes`);
+  // console.info(`${req.method} request received - save notes`);
   
   var fileData = JSON.parse(fs.readFileSync("./db/db.json", 
-    (err, data) => err ? console.error(err) : console.log ("success reading - save notes")
+    (err, data) => err ? console.error(err) : console.info ("success reading - save note")
   ));
   
   fileData.push(req.body);
 
-  console.info(fileData)
+  // console.info(fileData)
 
   fs.writeFileSync("./db/db.json", JSON.stringify(fileData),
-    (err, data) => err ? console.error(err) : console.log ("success adding note")
+    (err, data) => err ? console.error(err) : console.info ("success adding note")
   );
 
   // console.info(req.body);
