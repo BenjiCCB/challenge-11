@@ -39,7 +39,7 @@ app.post('/api/notes', (req, res) => {
 
   console.info(fileData)
 
-  fs.writeFileSync("./db/db.json", fileData,
+  fs.writeFileSync("./db/db.json", JSON.stringify(fileData),
     (err, data) => err ? console.error(err) : console.log ("success adding note")
   );
 
