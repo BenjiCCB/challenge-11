@@ -17,24 +17,41 @@ app.get('/notes', (req, res) =>
 );
 
 app.get('/api/notes', (req, res) => {
-  console.info(`${req.method} request received`);
+  // console.info(`${req.method} request received`);
 
-  fs.readFileSync("./db/db.json", 
-    (err, data) => err ? console.error(err) : console.log ("success reading \n" + data)
-  );
+  var fileData = JSON.parse(fs.readFileSync("./db/db.json", 
+    (err, data) => err ? console.error(err) : console.log ("success reading - page get request")
+  ));
+  // console.info(fileData);
 
-  res.json(`${req.method} request received -testing`);
-
+  res.json(fileData);
 
 });
-
 
 app.post('/api/notes', (req, res) => {
-  console.info(`${req.method} request received`);
-  console.info(req.body);
-  res.json(`${req.method} request received`);
+  console.info(`${req.method} request received - save notes`);
+  
+  var fileData = JSON.parse(fs.readFileSync("./db/db.json", 
+    (err, data) => err ? console.error(err) : console.log ("success reading - save notes")
+  ));
+  
+  fileData.push(req.body);
+
+  console.info(fileData)
+
+  fs.writeFileSync("./db/db.json", fileData,
+    (err, data) => err ? console.error(err) : console.log ("success adding note")
+  );
+
+  // console.info(req.body);
+  res.json(`${req.method} request received.  Note added`);
 });
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+ });
+
+// Listener
 app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT}`)
 );
