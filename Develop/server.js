@@ -16,37 +16,43 @@ app.get('/notes', (req, res) =>
   res.sendFile(path.join(__dirname, 'public/notes.html'))
 );
 
+// GET NOTES
 app.get('/api/notes', (req, res) => {
   // console.info(`${req.method} request received`);
 
   var fileData = JSON.parse(fs.readFileSync("./db/db.json", 
     (err, data) => err ? console.error(err) : console.log ("success reading - page get request")
   ));
-  // console.info(fileData);
 
   res.json(fileData);
 
 });
 
+// SAVE NOTE
 app.post('/api/notes', (req, res) => {
-  // console.info(`${req.method} request received - save notes`);
-  
-  var fileData = JSON.parse(fs.readFileSync("./db/db.json", 
+    var fileData = JSON.parse(fs.readFileSync("./db/db.json", 
     (err, data) => err ? console.error(err) : console.info ("success reading - save note")
   ));
   
   fileData.push(req.body);
 
-  // console.info(fileData)
-
   fs.writeFileSync("./db/db.json", JSON.stringify(fileData),
     (err, data) => err ? console.error(err) : console.info ("success adding note")
   );
 
-  // console.info(req.body);
-  res.json(`${req.method} request received.  Note added`);
+  res.json(`POST request received.  Note added`);
 });
 
+// DELETE NOTE
+app.delete('/api/notes/:id', (req, res) => {
+
+
+
+});
+
+
+
+// WILDCARD ROUTES
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
  });
