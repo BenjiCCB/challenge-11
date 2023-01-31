@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 
+// const uuid = require('./helpers/uuid');
+
 const app = express();
 const PORT = 3001;
 
@@ -18,7 +20,7 @@ app.get('/notes', (req, res) =>
 
 // GET NOTES
 app.get('/api/notes', (req, res) => {
-  // console.info(`${req.method} request received`);
+  // console.info(uuid())
 
   var fileData = JSON.parse(fs.readFileSync("./db/db.json", 
     (err, data) => err ? console.error(err) : console.log ("success reading - page get request")
