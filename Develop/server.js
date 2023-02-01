@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 
-// const uuid = require('./helpers/uuid');
+const uuid = require('./helpers/uuid');
 
 const app = express();
 const PORT = 3001;
@@ -20,7 +20,6 @@ app.get('/notes', (req, res) =>
 
 // GET NOTES
 app.get('/api/notes', (req, res) => {
-  // console.info(uuid())
 
   var fileData = JSON.parse(fs.readFileSync("./db/db.json", 
     (err, data) => err ? console.error(err) : console.log ("success reading - page get request")
@@ -32,11 +31,19 @@ app.get('/api/notes', (req, res) => {
 
 // SAVE NOTE
 app.post('/api/notes', (req, res) => {
-    var fileData = JSON.parse(fs.readFileSync("./db/db.json", 
+  var fileData = JSON.parse(fs.readFileSync("./db/db.json", 
     (err, data) => err ? console.error(err) : console.info ("success reading - save note")
   ));
-  
-  fileData.push(req.body);
+
+  const { title, text } = req.body;
+
+  const newNote = {
+    title,
+    text,
+    id: uuid(),
+  };
+
+  fileData.push(newNote);
 
   fs.writeFileSync("./db/db.json", JSON.stringify(fileData),
     (err, data) => err ? console.error(err) : console.info ("success adding note")
