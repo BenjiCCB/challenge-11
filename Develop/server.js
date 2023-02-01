@@ -21,9 +21,7 @@ app.get('/notes', (req, res) =>
 // GET NOTES
 app.get('/api/notes', (req, res) => {
 
-  var fileData = JSON.parse(fs.readFileSync("./db/db.json", 
-    (err, data) => err ? console.error(err) : console.log ("success reading - page get request")
-  ));
+  var fileData = JSON.parse(fs.readFileSync("./db/db.json"));
 
   res.json(fileData);
 
@@ -31,9 +29,7 @@ app.get('/api/notes', (req, res) => {
 
 // SAVE NOTE
 app.post('/api/notes', (req, res) => {
-  var fileData = JSON.parse(fs.readFileSync("./db/db.json", 
-    (err, data) => err ? console.error(err) : console.info ("success reading - save note")
-  ));
+  var fileData = JSON.parse(fs.readFileSync("./db/db.json"));
 
   const { title, text } = req.body;
 
@@ -45,17 +41,28 @@ app.post('/api/notes', (req, res) => {
 
   fileData.push(newNote);
 
-  fs.writeFileSync("./db/db.json", JSON.stringify(fileData),
-    (err, data) => err ? console.error(err) : console.info ("success adding note")
-  );
+  fs.writeFileSync("./db/db.json", JSON.stringify(fileData));
 
-  res.json(`POST request received.  Note added`);
+  res.send(`POST request received.  Note added`);
 });
 
 // DELETE NOTE
 app.delete('/api/notes/:id', (req, res) => {
 
+  const requestedNoteID = req.params.id;
+  
+  var fileData = JSON.parse(fs.readFileSync("./db/db.json"));
+  
+  for (let i = 0; i < fileData.length; i++) {
+    const currentNoteID = fileData[i].id;
+    if (requestedNoteID === currentNoteID) {
+      fileData.splice(i, 1);
+    }
+  }
+  
+  fs.writeFileSync("./db/db.json", JSON.stringify(fileData));
 
+  res.send(`DELETE request received.  Note deleted`);
 
 });
 
